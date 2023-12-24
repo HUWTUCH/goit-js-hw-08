@@ -1,4 +1,5 @@
 const gallery = document.querySelector('.gallery');
+const lightboxInstances = [];
 
 gallery.addEventListener('click', onGalleryItemClick);
 
@@ -13,20 +14,22 @@ function onGalleryItemClick(event) {
     const instance = basicLightbox.create(`
     <img src="${largeImageUrl}" width="800" height="600">
   `, {
-        onShow: (instance) => {
+        onShow: () => {
             document.addEventListener('keydown', onKeyPress);
         },
-        onClose: (instance) => {
+        onClose: () => {
             document.removeEventListener('keydown', onKeyPress);
         }
     });
 
     instance.show();
+    lightboxInstances.push(instance);
 }
 
 function onKeyPress(event) {
-    if (event.key === 'Escape') {
-        basicLightbox.close();
+    if (event.key === 'Escape' && lightboxInstances.length > 0) {
+        lightboxInstances[lightboxInstances.length - 1].close();
+        lightboxInstances.pop();
     }
 }
 
@@ -122,3 +125,4 @@ function renderGallery(images) {
 }
 
 renderGallery(images);
+
