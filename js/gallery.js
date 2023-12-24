@@ -12,12 +12,17 @@ function onGalleryItemClick(event) {
 
     const instance = basicLightbox.create(`
     <img src="${largeImageUrl}" width="800" height="600">
-  `);
+  `, {
+        onShow: (instance) => {
+            document.addEventListener('keydown', onKeyPress);
+        },
+        onClose: (instance) => {
+            document.removeEventListener('keydown', onKeyPress);
+        }
+    });
 
     instance.show();
 }
-
-document.addEventListener('keydown', onKeyPress);
 
 function onKeyPress(event) {
     if (event.key === 'Escape') {
